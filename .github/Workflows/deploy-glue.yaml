@@ -36,3 +36,8 @@ jobs:
                 "PythonVersion": "3"
               }
             }'
+
+      - name: Start Glue Job
+        run: |
+          aws glue start-job-run \
+            --job-name realestate-raw-data-handler-git    
