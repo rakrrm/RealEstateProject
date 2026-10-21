@@ -23,8 +23,7 @@ jobs:
 
       - name: Upload Glue Script to S3
         run: |
-          aws s3 cp jobs/realestate_raw_data_handler.py \
-            s3://real-estate-dsr-3/glue-scripts/realestate_raw_data_handler.py
+          aws s3 cp jobs/realestate_raw_data_handler.py s3://real-estate-dsr-3/glue-scripts/realestate_raw_data_handler.py
 
       - name: Update Glue Job Script Location
         run: |
