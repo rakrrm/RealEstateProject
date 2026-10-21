@@ -1,25 +1,27 @@
-name: Deploy Glue Job
+
+name: Verify AWS Credentials
 
 on:
   push:
     branches:
       - master
+      - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  verify-aws:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-1
 
       - name: Verify AWS Credentials
-        run: |
-          aws sts get-caller-identity
+        run: aws sts get-caller-identity
