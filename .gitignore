@@ -1,0 +1,19 @@
+# created by virtualenv automatically
+# PyCharm
+.idea/
+
+# Virtual Environment
+Lib/
+Scripts/
+share/
+pyvenv.cfg
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# Logs
+*.log
