@@ -1,27 +1,44 @@
 
-name: Verify AWS Credentials
+name: Deploy Glue Job
 
 on:
   push:
     branches:
       - master
-      - main
-  workflow_dispatch:
 
 jobs:
-  verify-aws:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-1
 
       - name: Verify AWS Credentials
-        run: aws sts get-caller-identity
+        run: |
+          aws sts get-caller-identity    
+
+      - name: Upload Glue Script to S3
+        run: |
+          aws s3 cp jobs/realestate_raw_data_handler.py s3://real-estate-dsr-3/glue-scripts/realestate_raw_data_handler.py
+
+      - name: Update Glue Job Script Location
+        run: |
+          aws glue update-job \
+            --job-name realestate-raw-data-handler-git \
+            --job-update '{
+              "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://real-estate-dsr-3/glue-scripts/realestate_raw_data_handler.py",
+                "PythonVersion": "3"
+              }
+            }'
+
+     
